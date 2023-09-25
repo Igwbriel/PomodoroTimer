@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 export function Header() {
   return (
     <HeaderContainer>
-      <img src={LogoIgnite} />
+      <img src={LogoIgnite} alt="" />
       <nav>
         <NavLink to="/" title="Timer">
           <Timer size={24} />
