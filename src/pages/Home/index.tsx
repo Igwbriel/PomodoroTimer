@@ -63,8 +63,8 @@ export function Home() {
           activeCycle.startDate,
         )
         if (secondsDiff >= totalSeconds) {
-          setCycles(
-            cycles.map((cycle) => {
+          setCycles((state) =>
+            state.map((cycle) => {
               if (cycle.id === activeCycleId) {
                 return { ...cycle, finishedDate: new Date() }
               } else {
@@ -72,6 +72,8 @@ export function Home() {
               }
             }),
           )
+          setAmountSecondsPassed(totalSeconds)
+          clearInterval(interval)
         } else {
           setAmountSecondsPassed(secondsDiff)
         }
@@ -80,7 +82,7 @@ export function Home() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle, totalSeconds])
+  }, [activeCycle, totalSeconds, activeCycleId])
   function handleCreateNewCicle(data: NewCycleFormData) {
     const id = String(new Date().getTime())
 
@@ -98,8 +100,8 @@ export function Home() {
   }
 
   function handleInterruptedCycle() {
-    setCycles(
-      cycles.map((cycle) => {
+    setCycles((state) =>
+      state.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return { ...cycle, interrueptDate: new Date() }
         } else {
