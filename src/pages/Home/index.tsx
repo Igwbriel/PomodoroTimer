@@ -4,6 +4,7 @@ import {
   StarCountdownButton,
   StopCountdownButton,
 } from './styles'
+
 import { useContext } from 'react'
 import { NewCycleForm } from './components/NewCycleForm'
 import { Countdown } from './components/Countdonw'
@@ -36,14 +37,19 @@ export function Home() {
       minutesAmount: 0,
     },
   })
-  const { handleSubmit, watch /* reset */ } = newCycleForm
+  const { handleSubmit, watch, reset } = newCycleForm
+
+  function handleCreateNewCycle(data: NewCycleFormData) {
+    CreateNewCicle(data)
+    reset()
+  }
 
   const task = watch('task')
   const isSubmitDisabled = !task
 
   return (
     <HomeContainer>
-      <form onSubmit={handleSubmit(CreateNewCicle)} action="">
+      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
         <FormProvider {...newCycleForm}>
           <NewCycleForm />
         </FormProvider>
