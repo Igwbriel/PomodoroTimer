@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useReducer, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react'
 import { Cycle, cyclesReducers } from '../reducers/cycles/reducer'
 import {
   addNewCycleAction,
@@ -31,12 +37,30 @@ interface CyclesContextProviderProps {
 export function CyclesContextProvider({
   children,
 }: CyclesContextProviderProps) {
-  const [cyclesState, dispatch] = useReducer(cyclesReducers, {
-    cycles: [],
-    activeCycleId: null,
-  })
+  const [cyclesState, dispatch] = useReducer(
+    cyclesReducers,
+    {
+      cycles: [],
+      activeCycleId: null,
+    },
+    () => {
+      const storadStateAsJSON = localStorage.getItem(
+        '@PomodoroTimer: Cycles-state-1.0.0',
+      )
+
+      if (storadStateAsJSON) {
+        return JSON.parse(storadStateAsJSON)
+      }
+    },
+  )
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(cyclesState)
+
+    localStorage.setItem('@PomodoroTimer: Cycles-state-1.0.0', stateJSON)
+  }, [cyclesState])
 
   const { cycles, activeCycleId } = cyclesState
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
